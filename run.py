@@ -3,7 +3,12 @@ Convenient startup script for Jim's File Converter.
 Run this file to start the application.
 """
 
-import uvicorn
+import sys
+try:
+    import uvicorn
+except ImportError:
+    print("The 'uvicorn' package is not installed. Install it with: pip install uvicorn[standard]")
+    sys.exit(1)
 from app.config import settings
 
 if __name__ == "__main__":
