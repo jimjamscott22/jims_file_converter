@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jim's File Converter - Image Format Converter</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Jim's File Converter</h1>
+            <p class="subtitle">Convert your images between formats easily</p>
+        </header>
+
+        <main>
+            <div class="converter-card">
+                <!-- File Upload Area -->
+                <div id="dropZone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drag & Drop your image here</h3>
+                        <p>or</p>
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">
+                            Browse Files
+                        </button>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <p class="hint">Supported formats: JPEG, PNG, WebP, GIF (Max {{ max_file_size_mb }}MB)</p>
+                    </div>
+                </div>
+
+                <!-- File Preview -->
+                <div id="filePreview" class="file-preview hidden">
+                    <div class="preview-header">
+                        <h3>Selected File</h3>
+                        <button type="button" class="btn-icon" onclick="clearFile()" title="Remove file">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="preview-content">
+                        <img id="previewImage" src="" alt="Preview">
+                        <div class="file-info">
+                            <p id="fileName" class="file-name"></p>
+                            <p id="fileSize" class="file-size"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Format Selection -->
+                <div id="formatSelection" class="format-selection hidden">
+                    <label for="outputFormat" class="form-label">Convert to:</label>
+                    <div class="format-options">
+                        <select id="outputFormat" class="format-select">
+                            <option value="">Select format...</option>
+                            <option value="jpeg">JPEG</option>
+                            <option value="png">PNG</option>
+                            <option value="webp">WebP</option>
+                            <option value="gif">GIF</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <div id="convertButtonContainer" class="convert-button-container hidden">
+                    <button type="button" id="convertBtn" class="btn btn-primary" onclick="convertFile()">
+                        Convert Image
+                    </button>
+                </div>
+
+                <!-- Progress Bar -->
+                <div id="progressContainer" class="progress-container hidden">
+                    <div class="progress-bar">
+                        <div id="progressFill" class="progress-fill"></div>
+                    </div>
+                    <p id="progressText" class="progress-text">Processing...</p>
+                </div>
+
+                <!-- Result -->
+                <div id="resultContainer" class="result-container hidden">
+                    <div class="result-success">
+                        <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        <h3>Conversion Successful!</h3>
+                        <p id="resultMessage"></p>
+                        <button type="button" id="downloadBtn" class="btn btn-primary" onclick="downloadFile()">
+                            Download Converted File
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="reset()">
+                            Convert Another File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorContainer" class="error-container hidden">
+                    <div class="error-message">
+                        <svg class="error-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <h3>Oops! Something went wrong</h3>
+                        <p id="errorMessage"></p>
+                        <button type="button" class="btn btn-secondary" onclick="clearError()">
+                            Try Again
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+                <h2>How It Works</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-number">1</div>
+                        <h3>Upload</h3>
+                        <p>Drag and drop your image or click to browse</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-number">2</div>
+                        <h3>Select Format</h3>
+                        <p>Choose your desired output format</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-number">3</div>
+                        <h3>Convert</h3>
+                        <p>Click convert and wait for processing</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-number">4</div>
+                        <h3>Download</h3>
+                        <p>Get your converted file instantly</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Jim's File Converter. Built with FastAPI and ❤️</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+
