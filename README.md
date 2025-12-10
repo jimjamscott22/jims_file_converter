@@ -157,6 +157,59 @@ python -m uvicorn app.main:app --reload
 - Ensure port 8000 is not already in use
 - Check that all dependencies are installed correctly
 
+**Rust/Cargo build errors on Windows (pydantic-core):**
+- If `pip install -r requirements.txt` asks for Rust/Cargo (e.g., during `pydantic-core` build), install Rust via https://rustup.rs/ and ensure `cargo` is on your PATH.
+- Verify with:
+  ```bash
+  cargo --version
+  ```
+- Then re-run:
+  ```bash
+  pip install --no-cache-dir -r requirements.txt
+  ```
+- If `cargo` is still not found, open a new terminal and add Rust to PATH (PowerShell):
+  ```powershell
+  $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
+  ```
+  Or persist for the user (PowerShell):
+  ```powershell
+  setx PATH "$env:USERPROFILE\.cargo\bin;$env:Path"
+  ```
+  CMD (current session):
+  ```cmd
+  set PATH=%USERPROFILE%\.cargo\bin;%PATH%
+  ```
+  Then retry:
+  ```bash
+  pip install --no-cache-dir -r requirements.txt
+  ```
+
+**Windows MIME detection missing (`python-magic` skipped):**
+- If you see `Ignoring python-magic: markers 'platform_system != "Windows"' don't match your environment` and MIME detection fails, install the Windows wheel:
+  ```bash
+  pip install python-magic-bin==0.4.14
+  ```
+
+**Virtual environment not active:**
+- Ensure commands are run after activating the venv:
+  ```powershell
+  # PowerShell
+  .\venv\Scripts\activate
+  ```
+  ```cmd
+  REM CMD
+  venv\Scripts\activate
+  ```
+- Verify `pip`/`python` come from the venv:
+  ```bash
+  python -m pip --version
+  python -c "import sys; print(sys.prefix)"
+  ```
+- If they don’t point to `.../venv`, activate and re-run:
+  ```bash
+  pip install --no-cache-dir -r requirements.txt
+  ```
+
 ## License
 
 MIT License - See LICENSE file for details
