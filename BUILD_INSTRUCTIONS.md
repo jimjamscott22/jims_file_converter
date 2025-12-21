@@ -6,7 +6,7 @@ This guide explains how to build a standalone Windows executable (.exe) for Jim'
 
 - Python 3.8 or higher
 - All project dependencies installed (`pip install -r requirements.txt`)
-- PyInstaller installed (`pip install pyinstaller`)
+- Development dependencies installed (`pip install -r requirements-dev.txt`)
 
 ## Quick Build
 
@@ -79,6 +79,7 @@ To share the application with others:
 **"Module not found" errors during build:**
 ```bash
 pip install --no-cache-dir -r requirements.txt
+pip install --no-cache-dir -r requirements-dev.txt
 python build_exe.py
 ```
 

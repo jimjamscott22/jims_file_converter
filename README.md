@@ -58,21 +58,29 @@ cd jims_file_converter
 
 2. Create a virtual environment:
 ```bash
-python -m venv venv
-
-# On Windows:
-venv\Scripts\activate
-
-# On Mac/Linux:
-source venv/bin/activate
+python3 -m venv .venv
 ```
 
-3. Install dependencies:
+3. Activate the virtual environment:
+```bash
+# On Mac/Linux:
+source .venv/bin/activate
+
+# On Windows:
+.venv\Scripts\activate
+```
+
+4. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Create a `.env` file in the root directory with the following content:
+   *Optional: Install development dependencies (for building executables):*
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+5. Create a `.env` file in the root directory with the following content:
 ```env
 CLOUDCONVERT_API_KEY=your_api_key_here
 MAX_FILE_SIZE_MB=10
@@ -81,20 +89,32 @@ PORT=8000
 ```
    **Note:** Simply create a new file named `.env` (with the dot at the beginning) in the root folder.
 
-5. Get your CloudConvert API key:
+6. Get your CloudConvert API key:
    - Sign up at https://cloudconvert.com/
    - Navigate to Dashboard > API
    - Copy your API key and add it to the `.env` file
 
 ### Running the Application
 
-**Option 1: Using the run script (Recommended)**
+**Option 1: Using the quick start script (Easiest!)**
 ```bash
+./start.sh
+```
+This automatically activates the virtual environment and starts the server.
+
+**Option 2: Manual activation and run**
+```bash
+# Activate the virtual environment first
+source .venv/bin/activate  # On Mac/Linux
+# .venv\Scripts\activate   # On Windows
+
+# Then run the application
 python run.py
 ```
 
-**Option 2: Using uvicorn directly**
+**Option 3: Using uvicorn directly**
 ```bash
+# Activate the virtual environment first, then:
 python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
