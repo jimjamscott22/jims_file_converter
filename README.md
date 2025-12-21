@@ -20,6 +20,28 @@ A modern web-based image conversion tool that supports converting between JPEG, 
 
 ## Setup Instructions
 
+### Option A: Quick Start with Windows Executable (Easiest!)
+
+If you just want to run the app without setting up Python:
+
+1. **Download or build the executable** (see [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md))
+2. **Create a `.env` file** in the same folder as `JimsFileConverter.exe`:
+   ```env
+   CLOUDCONVERT_API_KEY=your_api_key_here
+   MAX_FILE_SIZE_MB=10
+   HOST=127.0.0.1
+   PORT=8000
+   ```
+3. **Get your CloudConvert API key:**
+   - Sign up at https://cloudconvert.com/
+   - Navigate to Dashboard > API
+   - Copy your API key and add it to the `.env` file
+4. **Double-click `JimsFileConverter.exe`** - The browser will open automatically!
+
+### Option B: Python Development Setup
+
+If you want to develop or modify the code:
+
 ### Prerequisites
 
 - Python 3.8 or higher

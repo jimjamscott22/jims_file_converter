@@ -4,15 +4,21 @@ Loads settings from environment variables with sensible defaults.
 """
 
 import os
+import sys
 from pathlib import Path
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 
+# Determine base directory (handles both normal execution and PyInstaller)
+if getattr(sys, 'frozen', False):
+    # Running as compiled executable
+    BASE_DIR = Path(sys._MEIPASS)  # type: ignore
+else:
+    # Running as script
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
 # Load environment variables from .env file
 load_dotenv()
-
-# Project root directory
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):

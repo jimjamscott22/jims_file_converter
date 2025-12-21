@@ -56,3 +56,10 @@ htmlcov/
 # Uploaded files
 uploads/
 
+# PyInstaller build artifacts
+*.spec
+build/
+dist/*.exe
+dist/*.dll
+dist/*.pyd
+dist/_internal/
