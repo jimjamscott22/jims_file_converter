@@ -9,7 +9,15 @@ import webbrowser
 import time
 import threading
 from pathlib import Path
-
+# Fix stdin/stdout/stderr for windowed mode (prevents uvicorn logging errors)
+if getattr(sys, 'frozen', False):
+    # Running as compiled executable in windowed mode
+    if sys.stdin is None:
+        sys.stdin = open(os.devnull, 'r')
+    if sys.stdout is None:
+        sys.stdout = open(os.devnull, 'w')
+    if sys.stderr is None:
+        sys.stderr = open(os.devnull, 'w')
 # Handle PyInstaller bundled resources
 if getattr(sys, 'frozen', False):
     # Running as compiled executable
@@ -84,14 +92,19 @@ def main():
             app,
             host="127.0.0.1",  # Use localhost for exe
             port=settings.port,
-            log_level="info"
+            log_level="warning",  # Reduce logging verbosity for windowed mode
+            access_log=False      # Disable access logs to avoid console issues
         )
     except KeyboardInterrupt:
         print("\n\n👋 Shutting down...")
     except Exception as e:
         print(f"\n❌ Error: {e}")
-        print("\nPress Enter to exit...")
-        input()
+        # Try to show error in a message box if possible
+        try:
+            import ctypes
+            ctypes.windll.user32.MessageBoxW(0, str(e), "Jim's File Converter - Error", 0x10)
+        except:
+            pass
         sys.exit(1)
 
 if __name__ == "__main__":
