@@ -39,13 +39,13 @@ def open_browser(url, delay=2):
 def main():
     """Main entry point for the launcher."""
     print("=" * 60)
-    print("🎨 Jim's File Converter")
+    print("[*] Jim's File Converter")
     print("=" * 60)
     
     # Check for .env file
     env_file = ORIGINAL_DIR / ".env"
     if not env_file.exists():
-        print("\n⚠️  WARNING: .env file not found!")
+        print("\n[!] WARNING: .env file not found!")
         print(f"Please create a .env file in: {ORIGINAL_DIR}")
         print("\nThe .env file should contain:")
         print("CLOUDCONVERT_API_KEY=your_api_key_here")
@@ -65,13 +65,13 @@ def main():
     
     url = f"http://127.0.0.1:{settings.port}"
     
-    print(f"🌐 Starting server at {url}")
-    print(f"📁 Temp directory: {temp_dir}")
-    print(f"📊 Max file size: {settings.max_file_size_mb}MB")
-    print(f"🔧 Supported formats: {', '.join(settings.supported_formats)}")
+    print(f"[>] Starting server at {url}")
+    print(f"[>] Temp directory: {temp_dir}")
+    print(f"[>] Max file size: {settings.max_file_size_mb}MB")
+    print(f"[>] Supported formats: {', '.join(settings.supported_formats)}")
     print("=" * 60)
-    print("\n✨ Browser will open automatically...")
-    print("❌ Close this window to stop the server\n")
+    print("\n[+] Browser will open automatically...")
+    print("[x] Close this window to stop the server\n")
     
     # Open browser in a separate thread
     browser_thread = threading.Thread(target=open_browser, args=(url,))
@@ -87,9 +87,9 @@ def main():
             log_level="info"
         )
     except KeyboardInterrupt:
-        print("\n\n👋 Shutting down...")
+        print("\n\n[*] Shutting down...")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\n[!] Error: {e}")
         print("\nPress Enter to exit...")
         input()
         sys.exit(1)
