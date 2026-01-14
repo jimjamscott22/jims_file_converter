@@ -67,6 +67,27 @@
                     </div>
                 </div>
 
+                <!-- Conversion Options -->
+                <div id="optionsSection" class="options-section hidden">
+                    <h3>Conversion Options</h3>
+                    <div class="option-group">
+                        <label for="qualityRange" class="form-label">Quality</label>
+                        <div class="range-row">
+                            <input type="range" id="qualityRange" min="10" max="100" step="1" value="85">
+                            <span id="qualityValue" class="range-value">85</span>
+                        </div>
+                        <p class="hint small">Applies to JPEG and WebP output.</p>
+                    </div>
+                    <div class="option-group">
+                        <label class="form-label">Resize (optional)</label>
+                        <div class="resize-inputs">
+                            <input type="number" id="resizeWidth" min="1" max="10000" placeholder="Width (px)">
+                            <input type="number" id="resizeHeight" min="1" max="10000" placeholder="Height (px)">
+                        </div>
+                        <p class="hint small">Leave blank to keep original size.</p>
+                    </div>
+                </div>
+
                 <!-- Convert Button -->
                 <div id="convertButtonContainer" class="convert-button-container hidden">
                     <button type="button" id="convertBtn" class="btn btn-primary" onclick="convertFile()">
@@ -153,4 +174,3 @@
     <script src="/static/js/app.js"></script>
 </body>
 </html>
-

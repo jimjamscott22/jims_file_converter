@@ -31,7 +31,10 @@ class CloudConvertService:
         self,
         input_file_path: Path,
         output_format: str,
-        output_file_path: Path
+        output_file_path: Path,
+        quality: Optional[int] = None,
+        resize_width: Optional[int] = None,
+        resize_height: Optional[int] = None
     ) -> Path:
         """
         Convert an image file to a different format.
@@ -40,6 +43,9 @@ class CloudConvertService:
             input_file_path: Path to input file
             output_format: Desired output format (jpeg, png, webp, gif)
             output_file_path: Path where converted file should be saved
+            quality: Optional quality for lossy formats (1-100)
+            resize_width: Optional target width in pixels
+            resize_height: Optional target height in pixels
             
         Returns:
             Path to the converted file
@@ -56,7 +62,13 @@ class CloudConvertService:
         try:
             async with httpx.AsyncClient(timeout=120.0) as client:
                 # Step 1: Create a job
-                job_response = await self._create_job(client, output_format)
+                job_response = await self._create_job(
+                    client,
+                    output_format,
+                    quality=quality,
+                    resize_width=resize_width,
+                    resize_height=resize_height
+                )
                 
                 # Step 2: Upload the file
                 upload_task = self._find_task(job_response, "import/upload")
@@ -77,11 +89,31 @@ class CloudConvertService:
         except Exception as e:
             raise ConversionError(f"Conversion failed: {str(e)}")
     
-    async def _create_job(self, client: httpx.AsyncClient, output_format: str) -> Dict[str, Any]:
+    async def _create_job(
+        self,
+        client: httpx.AsyncClient,
+        output_format: str,
+        quality: Optional[int] = None,
+        resize_width: Optional[int] = None,
+        resize_height: Optional[int] = None
+    ) -> Dict[str, Any]:
         """Create a conversion job."""
         # Normalize format
         if output_format == 'jpg':
             output_format = 'jpeg'
+        
+        convert_task: Dict[str, Any] = {
+            "operation": "convert",
+            "input": "import-my-file",
+            "output_format": output_format
+        }
+        
+        if quality is not None:
+            convert_task["quality"] = quality
+        if resize_width is not None:
+            convert_task["width"] = resize_width
+        if resize_height is not None:
+            convert_task["height"] = resize_height
         
         job_data = {
             "tasks": {
@@ -89,9 +121,7 @@ class CloudConvertService:
                     "operation": "import/upload"
                 },
                 "convert-my-file": {
-                    "operation": "convert",
-                    "input": "import-my-file",
-                    "output_format": output_format
+                    **convert_task
                 },
                 "export-my-file": {
                     "operation": "export/url",
@@ -193,4 +223,3 @@ class CloudConvertService:
 
 # Create singleton instance
 cloudconvert_service = CloudConvertService()
-

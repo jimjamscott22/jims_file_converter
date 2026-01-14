@@ -10,6 +10,7 @@ A modern web-based image conversion tool that supports converting between JPEG, 
 - ⚡ Fast conversion using CloudConvert API
 - 🎨 Clean, modern UI
 - 📊 Real-time progress tracking
+- 🛠️ Optional quality and resize controls
 
 ## Tech Stack
 
@@ -161,9 +162,10 @@ jims_file_converter/
 1. Open the application in your browser
 2. Drag and drop an image file or click to browse
 3. Select the desired output format (JPEG, PNG, WebP, or GIF)
-4. Click "Convert"
-5. Wait for the conversion to complete
-6. Download your converted file automatically
+4. (Optional) Adjust quality or resize settings
+5. Click "Convert"
+6. Wait for the conversion to complete
+7. Download your converted file automatically
 
 ## File Size Limits
 
@@ -255,4 +257,3 @@ python -m uvicorn app.main:app --reload
 ## License
 
 MIT License - See LICENSE file for details
-

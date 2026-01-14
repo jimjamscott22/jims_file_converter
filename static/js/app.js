@@ -11,6 +11,11 @@ const fileName = document.getElementById('fileName');
 const fileSize = document.getElementById('fileSize');
 const formatSelection = document.getElementById('formatSelection');
 const outputFormat = document.getElementById('outputFormat');
+const optionsSection = document.getElementById('optionsSection');
+const qualityRange = document.getElementById('qualityRange');
+const qualityValue = document.getElementById('qualityValue');
+const resizeWidth = document.getElementById('resizeWidth');
+const resizeHeight = document.getElementById('resizeHeight');
 const convertButtonContainer = document.getElementById('convertButtonContainer');
 const convertBtn = document.getElementById('convertBtn');
 const progressContainer = document.getElementById('progressContainer');
@@ -29,6 +34,7 @@ dropZone.addEventListener('dragover', handleDragOver);
 dropZone.addEventListener('dragleave', handleDragLeave);
 dropZone.addEventListener('drop', handleDrop);
 outputFormat.addEventListener('change', handleFormatChange);
+qualityRange.addEventListener('input', handleQualityChange);
 
 // Drag and Drop Handlers
 function handleDragOver(e) {
@@ -86,6 +92,7 @@ function displayFilePreview(file) {
     dropZone.classList.add('hidden');
     filePreview.classList.remove('hidden');
     formatSelection.classList.remove('hidden');
+    optionsSection.classList.remove('hidden');
     
     // Display file info
     fileName.textContent = file.name;
@@ -101,6 +108,7 @@ function displayFilePreview(file) {
     // Reset format selection
     outputFormat.value = '';
     convertButtonContainer.classList.add('hidden');
+    updateQualityAvailability();
 }
 
 function handleFormatChange() {
@@ -108,6 +116,23 @@ function handleFormatChange() {
         convertButtonContainer.classList.remove('hidden');
     } else {
         convertButtonContainer.classList.add('hidden');
+    }
+    updateQualityAvailability();
+}
+
+function handleQualityChange() {
+    qualityValue.textContent = qualityRange.value;
+}
+
+function updateQualityAvailability() {
+    const format = outputFormat.value;
+    const supportsQuality = ['jpeg', 'jpg', 'webp'].includes(format);
+    
+    qualityRange.disabled = !supportsQuality;
+    if (!supportsQuality) {
+        qualityValue.textContent = 'N/A';
+    } else {
+        qualityValue.textContent = qualityRange.value;
     }
 }
 
@@ -121,6 +146,7 @@ async function convertFile() {
     // Hide convert button and format selection, show progress
     convertButtonContainer.classList.add('hidden');
     formatSelection.classList.add('hidden');
+    optionsSection.classList.add('hidden');
     progressContainer.classList.remove('hidden');
     resultContainer.classList.add('hidden');
     errorContainer.classList.add('hidden');
@@ -136,6 +162,21 @@ async function convertFile() {
         const formData = new FormData();
         formData.append('file', selectedFile);
         formData.append('output_format', outputFormat.value);
+        
+        // Optional conversion options
+        if (['jpeg', 'jpg', 'webp'].includes(outputFormat.value)) {
+            formData.append('quality', qualityRange.value);
+        }
+        
+        const width = parseInt(resizeWidth.value, 10);
+        if (!Number.isNaN(width)) {
+            formData.append('resize_width', width);
+        }
+        
+        const height = parseInt(resizeHeight.value, 10);
+        if (!Number.isNaN(height)) {
+            formData.append('resize_height', height);
+        }
         
         // Send conversion request
         const response = await fetch('/api/convert', {
@@ -216,12 +257,14 @@ function showError(message) {
     progressContainer.classList.add('hidden');
     convertButtonContainer.classList.add('hidden');
     formatSelection.classList.add('hidden');
+    optionsSection.classList.add('hidden');
 }
 
 function clearError() {
     errorContainer.classList.add('hidden');
     if (selectedFile) {
         formatSelection.classList.remove('hidden');
+        optionsSection.classList.remove('hidden');
         if (outputFormat.value) {
             convertButtonContainer.classList.remove('hidden');
         }
@@ -236,10 +279,15 @@ function reset() {
     conversionResult = null;
     fileInput.value = '';
     outputFormat.value = '';
+    qualityRange.value = '85';
+    qualityValue.textContent = '85';
+    resizeWidth.value = '';
+    resizeHeight.value = '';
     
     dropZone.classList.remove('hidden');
     filePreview.classList.add('hidden');
     formatSelection.classList.add('hidden');
+    optionsSection.classList.add('hidden');
     convertButtonContainer.classList.add('hidden');
     progressContainer.classList.add('hidden');
     resultContainer.classList.add('hidden');
@@ -280,4 +328,3 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to check API health:', error);
         });
 });
-

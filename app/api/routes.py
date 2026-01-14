@@ -4,6 +4,7 @@ Defines all HTTP endpoints for the application.
 """
 
 import uuid
+from typing import Optional
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse
@@ -12,7 +13,9 @@ from app.utils.validators import (
     validate_file_size,
     validate_file_format,
     validate_output_format,
-    sanitize_filename
+    sanitize_filename,
+    validate_quality,
+    validate_resize_dimensions
 )
 from app.services.file_handler import file_handler
 from app.services.converter import cloudconvert_service, ConversionError
@@ -48,7 +51,10 @@ async def get_supported_formats():
 @router.post("/api/convert")
 async def convert_file(
     file: UploadFile = File(...),
-    output_format: str = Form(...)
+    output_format: str = Form(...),
+    quality: Optional[int] = Form(None),
+    resize_width: Optional[int] = Form(None),
+    resize_height: Optional[int] = Form(None)
 ):
     """
     Convert an uploaded image file to a different format.
@@ -56,6 +62,9 @@ async def convert_file(
     Args:
         file: The image file to convert
         output_format: Desired output format (jpeg, png, webp, gif)
+        quality: Optional quality for lossy formats (1-100)
+        resize_width: Optional width in pixels
+        resize_height: Optional height in pixels
         
     Returns:
         Information about the conversion and download URL
@@ -72,6 +81,21 @@ async def convert_file(
         
         # Validate output format
         output_format = validate_output_format(output_format)
+        
+        # Validate optional conversion options
+        quality_value = None
+        if quality is not None:
+            quality_value = validate_quality(quality)
+            if output_format not in ["jpg", "jpeg", "webp"]:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Quality is only supported for JPEG and WebP output formats"
+                )
+        
+        resize_width, resize_height = validate_resize_dimensions(
+            resize_width,
+            resize_height
+        )
         
         # Check if conversion is needed
         if input_format == output_format:
@@ -96,7 +120,10 @@ async def convert_file(
         await cloudconvert_service.convert_image(
             input_file_path,
             output_format,
-            output_file_path
+            output_file_path,
+            quality=quality_value,
+            resize_width=resize_width,
+            resize_height=resize_height
         )
         
         # Generate download URL
@@ -177,4 +204,3 @@ async def download_file(filename: str):
         media_type="application/octet-stream",
         background=None  # We'll handle cleanup separately
     )
-

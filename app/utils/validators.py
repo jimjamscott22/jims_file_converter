@@ -6,7 +6,7 @@ Validates file types, sizes, and formats before processing.
 import os
 import magic
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 from fastapi import UploadFile, HTTPException
 from app.config import settings
 
@@ -130,3 +130,58 @@ def sanitize_filename(filename: str) -> str:
     
     return name + ext
 
+
+def validate_quality(quality: int) -> int:
+    """
+    Validate quality setting for lossy formats.
+    
+    Args:
+        quality: Quality value (1-100)
+        
+    Returns:
+        Validated quality value
+        
+    Raises:
+        HTTPException: If quality is out of range
+    """
+    if quality < 1 or quality > 100:
+        raise HTTPException(
+            status_code=400,
+            detail="Quality must be between 1 and 100"
+        )
+    return quality
+
+
+def validate_resize_dimensions(
+    width: Optional[int],
+    height: Optional[int]
+) -> Tuple[Optional[int], Optional[int]]:
+    """
+    Validate optional resize dimensions.
+    
+    Args:
+        width: Target width in pixels
+        height: Target height in pixels
+        
+    Returns:
+        Validated width and height
+        
+    Raises:
+        HTTPException: If dimensions are out of range
+    """
+    max_dimension = 10000
+    
+    if width is not None:
+        if width < 1 or width > max_dimension:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Resize width must be between 1 and {max_dimension}px"
+            )
+    if height is not None:
+        if height < 1 or height > max_dimension:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Resize height must be between 1 and {max_dimension}px"
+            )
+    
+    return width, height
