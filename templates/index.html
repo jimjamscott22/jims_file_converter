@@ -13,8 +13,30 @@
             <p class="subtitle">Convert your images between formats easily</p>
         </header>
 
-        <main>
-            <div class="converter-card">
+        <div class="layout">
+            <aside class="side-menu">
+                <div class="side-menu-card">
+                    <div class="side-menu-header">
+                        <span class="menu-eyebrow">Guide</span>
+                        <h2>Quick Menu</h2>
+                        <p>Jump to any section</p>
+                    </div>
+                    <nav class="side-menu-nav" aria-label="Page">
+                        <a class="menu-link" href="#converter">Convert</a>
+                        <a class="menu-link" href="#optionsSection">Options</a>
+                        <a class="menu-link" href="#how-it-works">How It Works</a>
+                        <a class="menu-link" href="#site-footer">About</a>
+                    </nav>
+                    <div class="side-menu-divider"></div>
+                    <div class="side-menu-meta">
+                        <p class="menu-label">Limits</p>
+                        <p class="menu-meta">Max {{ max_file_size_mb }}MB • JPEG, PNG, WebP, GIF</p>
+                    </div>
+                </div>
+            </aside>
+
+            <main>
+            <section id="converter" class="converter-card">
                 <!-- File Upload Area -->
                 <div id="dropZone" class="drop-zone">
                     <div class="drop-zone-content">
@@ -136,10 +158,10 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Info Section -->
-            <div class="info-section">
+            <section id="how-it-works" class="info-section">
                 <h2>How It Works</h2>
                 <div class="info-grid">
                     <div class="info-card">
@@ -163,10 +185,11 @@
                         <p>Get your converted file instantly</p>
                     </div>
                 </div>
-            </div>
-        </main>
+            </section>
+            </main>
+        </div>
 
-        <footer>
+        <footer id="site-footer">
             <p>&copy; 2025 Jim's File Converter. Built with FastAPI and ❤️</p>
         </footer>
     </div>
