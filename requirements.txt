@@ -17,6 +17,9 @@ aiofiles==23.2.1
 pydantic>=2.10.0
 pydantic-settings>=2.6.0
 
+# Image processing (local conversion)
+Pillow>=10.0.0
+
 # Templates
 jinja2==3.1.2
 

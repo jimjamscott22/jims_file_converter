@@ -30,7 +30,7 @@
                     <div class="side-menu-divider"></div>
                     <div class="side-menu-meta">
                         <p class="menu-label">Limits</p>
-                        <p class="menu-meta">Max {{ max_file_size_mb }}MB • JPEG, PNG, WebP, GIF</p>
+                        <p class="menu-meta">Max {{ max_file_size_mb }}MB • JPEG, PNG, WebP, GIF, ICO</p>
                     </div>
                 </div>
             </aside>
@@ -51,7 +51,7 @@
                             Browse Files
                         </button>
                         <input type="file" id="fileInput" accept="image/*" hidden>
-                        <p class="hint">Supported formats: JPEG, PNG, WebP, GIF (Max {{ max_file_size_mb }}MB)</p>
+                        <p class="hint">Supported formats: JPEG, PNG, WebP, GIF, ICO (Max {{ max_file_size_mb }}MB)</p>
                     </div>
                 </div>
 
@@ -85,6 +85,7 @@
                             <option value="png">PNG</option>
                             <option value="webp">WebP</option>
                             <option value="gif">GIF</option>
+                            <option value="ico">ICO</option>
                         </select>
                     </div>
                 </div>

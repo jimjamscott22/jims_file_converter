@@ -70,9 +70,9 @@ function handleFileSelect(e) {
 // File Handling
 function handleFile(file) {
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon'];
     if (!validTypes.includes(file.type)) {
-        showError('Please select a valid image file (JPEG, PNG, WebP, or GIF)');
+        showError('Please select a valid image file (JPEG, PNG, WebP, GIF, or ICO)');
         return;
     }
     

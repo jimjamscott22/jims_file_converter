@@ -19,6 +19,7 @@ from app.utils.validators import (
 )
 from app.services.file_handler import file_handler
 from app.services.converter import cloudconvert_service, ConversionError
+from app.services.local_converter import local_convert_service
 
 router = APIRouter()
 
@@ -34,6 +35,7 @@ async def health_check():
     return {
         "status": "healthy",
         "api_configured": api_configured,
+        "local_conversion": True,
         "supported_formats": settings.supported_formats,
         "max_file_size_mb": settings.max_file_size_mb
     }
@@ -116,15 +118,39 @@ async def convert_file(
         )
         output_file_path = file_handler.get_temp_path(f"{uuid.uuid4()}_{output_filename}")
         
-        # Perform conversion
-        await cloudconvert_service.convert_image(
-            input_file_path,
-            output_format,
-            output_file_path,
-            quality=quality_value,
-            resize_width=resize_width,
-            resize_height=resize_height
-        )
+        # Perform conversion — try local Pillow first, fall back to CloudConvert
+        conversion_method = "local"
+        if local_convert_service.can_convert(output_format):
+            try:
+                await local_convert_service.convert_image(
+                    input_file_path,
+                    output_format,
+                    output_file_path,
+                    quality=quality_value,
+                    resize_width=resize_width,
+                    resize_height=resize_height,
+                )
+            except ConversionError:
+                # Local conversion failed — fall back to CloudConvert
+                conversion_method = "cloud"
+                await cloudconvert_service.convert_image(
+                    input_file_path,
+                    output_format,
+                    output_file_path,
+                    quality=quality_value,
+                    resize_width=resize_width,
+                    resize_height=resize_height,
+                )
+        else:
+            conversion_method = "cloud"
+            await cloudconvert_service.convert_image(
+                input_file_path,
+                output_format,
+                output_file_path,
+                quality=quality_value,
+                resize_width=resize_width,
+                resize_height=resize_height,
+            )
         
         # Generate download URL
         download_url = f"/api/download/{output_file_path.name}"
@@ -136,7 +162,8 @@ async def convert_file(
             "output_filename": output_filename,
             "download_url": download_url,
             "input_format": input_format,
-            "output_format": output_format
+            "output_format": output_format,
+            "conversion_method": conversion_method
         }
         
     except ConversionError as e:

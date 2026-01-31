@@ -32,7 +32,7 @@ class Settings(BaseSettings):
     max_file_size_bytes: int = max_file_size_mb * 1024 * 1024
     
     # Supported formats
-    supported_formats: list = ["jpg", "jpeg", "png", "webp", "gif"]
+    supported_formats: list = ["jpg", "jpeg", "png", "webp", "gif", "ico"]
     
     # Server Settings
     host: str = os.getenv("HOST", "0.0.0.0")
