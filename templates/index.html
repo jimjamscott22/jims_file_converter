@@ -9,8 +9,14 @@
 <body>
     <div class="container">
         <header>
-            <h1>🎨 Jim's File Converter</h1>
-            <p class="subtitle">Convert your images between formats easily</p>
+            <p class="header-kicker">LOCAL CONVERSION INTERFACE</p>
+            <h1>Jim's <span>File Converter</span></h1>
+            <p class="subtitle">A cooler, cleaner file conversion workspace for images and PDF to Markdown.</p>
+            <div class="header-meta" aria-label="Application details">
+                <span>FastAPI runtime</span>
+                <span>Max {{ max_file_size_mb }}MB</span>
+                <span>JPEG / PNG / WebP / GIF / ICO / PDF</span>
+            </div>
         </header>
 
         <div class="layout">
@@ -37,6 +43,11 @@
 
             <main>
             <section id="converter" class="converter-card">
+                <div class="section-intro">
+                    <p class="section-kicker">Workspace</p>
+                    <h2>Drop a file and route it to the right format.</h2>
+                    <p class="section-copy">Built for quick one-off conversions without burying the controls.</p>
+                </div>
                 <!-- File Upload Area -->
                 <div id="dropZone" class="drop-zone">
                     <div class="drop-zone-content">
@@ -174,27 +185,28 @@
 
             <!-- Info Section -->
             <section id="how-it-works" class="info-section">
-                <h2>How It Works</h2>
+                <p class="section-kicker">Flow</p>
+                <h2>How it runs</h2>
                 <div class="info-grid">
                     <div class="info-card">
                         <div class="info-number">1</div>
                         <h3>Upload</h3>
-                        <p>Drag and drop your image or click to browse</p>
+                        <p>Drop in an image or PDF, or browse from disk.</p>
                     </div>
                     <div class="info-card">
                         <div class="info-number">2</div>
                         <h3>Select Format</h3>
-                        <p>Choose your desired output format</p>
+                        <p>Only valid target formats stay available for the file you chose.</p>
                     </div>
                     <div class="info-card">
                         <div class="info-number">3</div>
                         <h3>Convert</h3>
-                        <p>Click convert and wait for processing</p>
+                        <p>Adjust quality or resize when needed, then run the conversion.</p>
                     </div>
                     <div class="info-card">
                         <div class="info-number">4</div>
                         <h3>Download</h3>
-                        <p>Get your converted file instantly</p>
+                        <p>Grab the output as soon as the job completes.</p>
                     </div>
                 </div>
             </section>
