@@ -1,0 +1,107 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="48" fill="#08111E"/>
+  <rect x="30" y="30" width="1140" height="840" rx="36" fill="url(#bgGlow)" fill-opacity="0.52"/>
+  <g opacity="0.25">
+    <path d="M0 151H1200" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M0 301H1200" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M0 451H1200" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M0 601H1200" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M0 751H1200" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M150 0V900" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M300 0V900" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M450 0V900" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M600 0V900" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M750 0V900" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M900 0V900" stroke="#8AA4D8" stroke-width="1"/>
+    <path d="M1050 0V900" stroke="#8AA4D8" stroke-width="1"/>
+  </g>
+  <circle cx="242" cy="342" r="120" fill="url(#fileHalo)"/>
+  <circle cx="892" cy="404" r="218" fill="url(#vaultHalo)"/>
+  <circle cx="928" cy="406" r="166" fill="url(#outputHalo)"/>
+  <path d="M270 410C391 410 454 394 531 363C589 340 660 320 745 320" stroke="url(#flowStroke)" stroke-width="16" stroke-linecap="round" stroke-dasharray="10 26"/>
+  <path d="M315 444C459 458 579 463 709 520" stroke="url(#flowStroke2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="8 22"/>
+  <g filter="url(#shadow)">
+    <path d="M202 220H320L382 282V486C382 506.987 364.987 524 344 524H202C181.013 524 164 506.987 164 486V258C164 237.013 181.013 220 202 220Z" fill="url(#fileFill)"/>
+    <path d="M320 220V276C320 291.464 332.536 304 348 304H382" fill="#31558E"/>
+    <path d="M236 330H310" stroke="#D5E3FF" stroke-width="18" stroke-linecap="round"/>
+    <path d="M236 376H298" stroke="#95B5F2" stroke-width="14" stroke-linecap="round"/>
+    <path d="M236 420H282" stroke="#95B5F2" stroke-width="14" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="705" y="194" width="334" height="424" rx="42" fill="url(#vaultShell)"/>
+    <rect x="731" y="220" width="282" height="372" rx="30" fill="#0B1D36" stroke="#294878" stroke-width="2"/>
+    <circle cx="872" cy="406" r="112" fill="#102746" stroke="#5A8DFB" stroke-width="8"/>
+    <circle cx="872" cy="406" r="70" fill="#0C1930" stroke="#87E4FF" stroke-width="4"/>
+    <path d="M872 318V494" stroke="#87E4FF" stroke-width="14" stroke-linecap="round"/>
+    <path d="M784 406H960" stroke="#87E4FF" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="872" cy="406" r="22" fill="#87E4FF"/>
+    <path d="M770 260H974" stroke="#2B4B7B" stroke-width="6" stroke-linecap="round"/>
+    <path d="M770 552H974" stroke="#2B4B7B" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <g filter="url(#glow)">
+    <path d="M960 297H1034L1096 359V581C1096 604.196 1077.2 623 1054 623H960C936.804 623 918 604.196 918 581V339C918 315.804 936.804 297 960 297Z" fill="url(#outputFill)"/>
+    <path d="M1034 297V351C1034 368.673 1048.33 383 1066 383H1096" fill="#7BEEFF"/>
+    <path d="M978 412H1048" stroke="#07111F" stroke-width="18" stroke-linecap="round"/>
+    <path d="M978 458H1036" stroke="#10345B" stroke-width="14" stroke-linecap="round"/>
+    <path d="M978 502H1022" stroke="#10345B" stroke-width="14" stroke-linecap="round"/>
+    <path d="M940 366L902 404L940 442" stroke="#87E4FF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <defs>
+    <linearGradient id="bgGlow" x1="128" y1="54" x2="1032" y2="846" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17345E"/>
+      <stop offset="1" stop-color="#08111E" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="fileHalo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(242 342) rotate(90) scale(120)">
+      <stop stop-color="#5A8DFB" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#5A8DFB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vaultHalo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(892 404) rotate(90) scale(218)">
+      <stop stop-color="#294878" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#294878" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="outputHalo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(928 406) rotate(90) scale(166)">
+      <stop stop-color="#87E4FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#87E4FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="flowStroke" x1="270" y1="410" x2="745" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5A8DFB"/>
+      <stop offset="1" stop-color="#87E4FF"/>
+    </linearGradient>
+    <linearGradient id="flowStroke2" x1="315" y1="444" x2="709" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#223A62"/>
+      <stop offset="1" stop-color="#5A8DFB"/>
+    </linearGradient>
+    <linearGradient id="fileFill" x1="164" y1="220" x2="382" y2="524" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E7F1FF"/>
+      <stop offset="1" stop-color="#AAC7F8"/>
+    </linearGradient>
+    <linearGradient id="vaultShell" x1="705" y1="194" x2="1039" y2="618" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1C345D"/>
+      <stop offset="1" stop-color="#0D1A2D"/>
+    </linearGradient>
+    <linearGradient id="outputFill" x1="918" y1="297" x2="1096" y2="623" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8FCFF"/>
+      <stop offset="1" stop-color="#8AE7FF"/>
+    </linearGradient>
+    <filter id="shadow" x="124" y="160" width="1015" height="523" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0117647 0 0 0 0 0.0509804 0 0 0 0 0.121569 0 0 0 0.48 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+    <filter id="glow" x="858" y="255" width="298" height="428" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset/>
+      <feGaussianBlur stdDeviation="18"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.529412 0 0 0 0 0.905882 0 0 0 0 1 0 0 0 0.42 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_1" result="shape"/>
+    </filter>
+  </defs>
+</svg>

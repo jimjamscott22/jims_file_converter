@@ -93,6 +93,18 @@ async def read_root(request: Request):
     )
 
 
+@app.get("/about")
+async def read_about(request: Request):
+    """Serve the about page."""
+    return templates.TemplateResponse(
+        "about.html",
+        {
+            "request": request,
+            "max_file_size_mb": settings.max_file_size_mb,
+        }
+    )
+
+
 @app.get("/ping")
 async def ping():
     """Simple ping endpoint for testing."""
@@ -107,4 +119,3 @@ if __name__ == "__main__":
         port=settings.port,
         reload=True
     )
-
