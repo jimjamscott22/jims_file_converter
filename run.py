@@ -7,7 +7,7 @@ import sys
 try:
     import uvicorn
 except ImportError:
-    print("The 'uvicorn' package is not installed. Install it with: pip install uvicorn[standard]")
+    print("The 'uvicorn' package is not installed. Install project dependencies with: uv sync")
     sys.exit(1)
 from app.config import settings
 
@@ -27,4 +27,3 @@ if __name__ == "__main__":
         port=settings.port,
         reload=True
     )
-

@@ -4,10 +4,10 @@ Get Jim's File Converter running in 5 minutes!
 
 ## Step 1: Install Python Dependencies
 
-Make sure you have Python 3.8+ installed, then run:
+Make sure you have Python 3.8+ and `uv` installed, then run:
 
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 ## Step 2: Get Your CloudConvert API Key
@@ -36,7 +36,7 @@ PORT=8000
 ## Step 4: Run the Application
 
 ```bash
-python run.py
+uv run python run.py
 ```
 
 You should see:
@@ -71,8 +71,8 @@ Supported formats: jpg, jpeg, png, webp, gif
 - Or stop the process using port 8000
 
 ### Import Errors
-- Make sure you installed all dependencies: `pip install -r requirements.txt`
-- Try creating a virtual environment first
+- Make sure you installed all dependencies: `uv sync`
+- `uv` will create the project virtual environment automatically
 
 ### File Upload Fails
 - Check that your file is under 10MB
@@ -87,4 +87,3 @@ Supported formats: jpg, jpeg, png, webp, gif
 - Modify the UI in `templates/index.html` and `static/css/style.css`
 
 Enjoy converting your images! 🎨
-

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Quick start script for Jim's File Converter
+# Quick start script for Jim's File Converter using uv
 
 cd "$(dirname "$0")"
 
@@ -15,17 +15,16 @@ if [ ! -f ".env" ]; then
     exit 1
 fi
 
-# Check if venv exists
-if [ ! -d ".venv" ]; then
-    echo "⚠️  Warning: Virtual environment not found!"
-    echo "Creating virtual environment..."
-    python3 -m venv .venv
-    echo "✓ Virtual environment created"
-    echo "Installing dependencies..."
-    .venv/bin/pip install -r requirements.txt
-    echo "✓ Dependencies installed"
+# Check if uv is installed
+if ! command -v uv >/dev/null 2>&1; then
+    echo "⚠️  Warning: uv is not installed!"
+    echo "Install it from: https://docs.astral.sh/uv/getting-started/installation/"
+    exit 1
 fi
 
 # Run the application
+echo "Syncing dependencies with uv..."
+uv sync
+
 echo "Starting server..."
-.venv/bin/python run.py
+uv run python run.py

@@ -5,19 +5,20 @@ This guide explains how to build a standalone Windows executable (.exe) for Jim'
 ## Prerequisites
 
 - Python 3.8 or higher
-- All project dependencies installed (`pip install -r requirements.txt`)
-- Development dependencies installed (`pip install -r requirements-dev.txt`)
+- `uv` installed
+- All project dependencies installed (`uv sync`)
+- Development dependencies installed (`uv sync --group dev`)
 
 ## Quick Build
 
-1. **Activate your virtual environment:**
-   ```powershell
-   .\venv\Scripts\activate
+1. **Sync dependencies:**
+   ```bash
+   uv sync --group dev
    ```
 
 2. **Run the build script:**
    ```bash
-   python build_exe.py
+   uv run python build_exe.py
    ```
 
 3. **Wait for the build to complete** (may take 2-5 minutes)
@@ -78,15 +79,14 @@ To share the application with others:
 
 **"Module not found" errors during build:**
 ```bash
-pip install --no-cache-dir -r requirements.txt
-pip install --no-cache-dir -r requirements-dev.txt
-python build_exe.py
+uv sync --group dev --refresh
+uv run python build_exe.py
 ```
 
 **Build succeeds but exe crashes:**
 - Use `--console` instead of `--windowed` in `build_exe.py` to see error messages
 - Check that all dependencies are installed
-- Ensure your code works with `python run.py` before building
+- Ensure your code works with `uv run python run.py` before building
 
 ### Runtime Issues
 
@@ -104,7 +104,7 @@ python build_exe.py
 **Antivirus blocks the exe:**
 - PyInstaller executables can trigger false positives
 - Add an exception in your antivirus software
-- Alternatively, run the Python script directly with `python run.py`
+- Alternatively, run the Python script directly with `uv run python run.py`
 
 ## Advanced Options
 
@@ -138,7 +138,7 @@ rmdir /s /q build dist
 del /f /q *.spec
 
 # Rebuild
-python build_exe.py
+uv run python build_exe.py
 ```
 
 ## File Size

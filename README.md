@@ -46,7 +46,7 @@ If you want to develop or modify the code:
 ### Prerequisites
 
 - Python 3.8 or higher
-- pip (Python package manager)
+- `uv` for Python environment and dependency management
 - CloudConvert API key (free tier available)
 
 ### Installation
@@ -57,31 +57,17 @@ git clone <repository-url>
 cd jims_file_converter
 ```
 
-2. Create a virtual environment:
+2. Install project dependencies with `uv`:
 ```bash
-python3 -m venv .venv
+uv sync
 ```
 
-3. Activate the virtual environment:
-```bash
-# On Mac/Linux:
-source .venv/bin/activate
-
-# On Windows:
-.venv\Scripts\activate
-```
-
-4. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-   *Optional: Install development dependencies (for building executables):*
+   *Optional: Include development dependencies (for building executables):*
    ```bash
-   pip install -r requirements-dev.txt
+   uv sync --group dev
    ```
 
-5. Create a `.env` file in the root directory with the following content:
+3. Create a `.env` file in the root directory with the following content:
 ```env
 CLOUDCONVERT_API_KEY=your_api_key_here
 MAX_FILE_SIZE_MB=10
@@ -90,7 +76,7 @@ PORT=8000
 ```
    **Note:** Simply create a new file named `.env` (with the dot at the beginning) in the root folder.
 
-6. Get your CloudConvert API key:
+4. Get your CloudConvert API key:
    - Sign up at https://cloudconvert.com/
    - Navigate to Dashboard > API
    - Copy your API key and add it to the `.env` file
@@ -101,22 +87,16 @@ PORT=8000
 ```bash
 ./start.sh
 ```
-This automatically activates the virtual environment and starts the server.
+This syncs the environment if needed and starts the server with `uv`.
 
-**Option 2: Manual activation and run**
+**Option 2: Run directly with `uv`**
 ```bash
-# Activate the virtual environment first
-source .venv/bin/activate  # On Mac/Linux
-# .venv\Scripts\activate   # On Windows
-
-# Then run the application
-python run.py
+uv run python run.py
 ```
 
 **Option 3: Using uvicorn directly**
 ```bash
-# Activate the virtual environment first, then:
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 Then open your browser and navigate to:
@@ -153,7 +133,7 @@ jims_file_converter/
 ├── temp/                    # Temporary file storage (auto-generated)
 ├── .env                     # Environment variables (create this)
 ├── .gitignore
-├── requirements.txt
+├── pyproject.toml
 └── README.md
 ```
 
@@ -183,7 +163,7 @@ jims_file_converter/
 
 To run in development mode with auto-reload:
 ```bash
-python -m uvicorn app.main:app --reload
+uv run uvicorn app.main:app --reload
 ```
 
 ## Troubleshooting
@@ -202,14 +182,14 @@ python -m uvicorn app.main:app --reload
 - Check that all dependencies are installed correctly
 
 **Rust/Cargo build errors on Windows (pydantic-core):**
-- If `pip install -r requirements.txt` asks for Rust/Cargo (e.g., during `pydantic-core` build), install Rust via https://rustup.rs/ and ensure `cargo` is on your PATH.
+- If `uv sync` asks for Rust/Cargo (e.g., during `pydantic-core` build), install Rust via https://rustup.rs/ and ensure `cargo` is on your PATH.
 - Verify with:
   ```bash
   cargo --version
   ```
 - Then re-run:
   ```bash
-  pip install --no-cache-dir -r requirements.txt
+  uv sync --refresh
   ```
 - If `cargo` is still not found, open a new terminal and add Rust to PATH (PowerShell):
   ```powershell
@@ -225,33 +205,24 @@ python -m uvicorn app.main:app --reload
   ```
   Then retry:
   ```bash
-  pip install --no-cache-dir -r requirements.txt
+  uv sync --refresh
   ```
 
 **Windows MIME detection missing (`python-magic` skipped):**
 - If you see `Ignoring python-magic: markers 'platform_system != "Windows"' don't match your environment` and MIME detection fails, install the Windows wheel:
   ```bash
-  pip install python-magic-bin==0.4.14
+  uv add "python-magic-bin==0.4.14"
   ```
 
-**Virtual environment not active:**
-- Ensure commands are run after activating the venv:
-  ```powershell
-  # PowerShell
-  .\venv\Scripts\activate
-  ```
-  ```cmd
-  REM CMD
-  venv\Scripts\activate
-  ```
-- Verify `pip`/`python` come from the venv:
+**Virtual environment issues:**
+- `uv` manages the project virtual environment automatically in `.venv`.
+- Verify `python` comes from the project environment:
   ```bash
-  python -m pip --version
-  python -c "import sys; print(sys.prefix)"
+  uv run python -c "import sys; print(sys.prefix)"
   ```
-- If they don’t point to `.../venv`, activate and re-run:
+- If it does not point to `.../.venv`, re-sync:
   ```bash
-  pip install --no-cache-dir -r requirements.txt
+  uv sync
   ```
 
 ## License
