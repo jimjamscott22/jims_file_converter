@@ -7,6 +7,7 @@ const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
 const filePreview = document.getElementById('filePreview');
 const previewImage = document.getElementById('previewImage');
+const previewPdf = document.getElementById('previewPdf');
 const fileName = document.getElementById('fileName');
 const fileSize = document.getElementById('fileSize');
 const formatSelection = document.getElementById('formatSelection');
@@ -68,11 +69,17 @@ function handleFileSelect(e) {
 }
 
 // File Handling
+function isPdfFile(file) {
+    return file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+}
+
 function handleFile(file) {
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon'];
-    if (!validTypes.includes(file.type)) {
-        showError('Please select a valid image file (JPEG, PNG, WebP, GIF, or ICO)');
+    const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon'];
+    const isPdf = isPdfFile(file);
+    
+    if (!validImageTypes.includes(file.type) && !isPdf) {
+        showError('Please select a valid image file (JPEG, PNG, WebP, GIF, ICO) or a PDF document');
         return;
     }
     
@@ -84,10 +91,10 @@ function handleFile(file) {
     }
     
     selectedFile = file;
-    displayFilePreview(file);
+    displayFilePreview(file, isPdf);
 }
 
-function displayFilePreview(file) {
+function displayFilePreview(file, isPdf) {
     // Hide drop zone, show preview
     dropZone.classList.add('hidden');
     filePreview.classList.remove('hidden');
@@ -98,17 +105,54 @@ function displayFilePreview(file) {
     fileName.textContent = file.name;
     fileSize.textContent = formatBytes(file.size);
     
-    // Display image preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        previewImage.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    
-    // Reset format selection
-    outputFormat.value = '';
-    convertButtonContainer.classList.add('hidden');
+    if (isPdf) {
+        // Show PDF icon, hide image preview
+        previewImage.classList.add('hidden');
+        previewPdf.classList.remove('hidden');
+        // Reset then auto-select Markdown as the only valid output
+        outputFormat.value = '';
+        filterOutputFormats('pdf');
+    } else {
+        // Display image preview, hide PDF icon
+        previewImage.classList.remove('hidden');
+        previewPdf.classList.add('hidden');
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        // Reset format selection for image files
+        outputFormat.value = '';
+        convertButtonContainer.classList.add('hidden');
+        filterOutputFormats('image');
+    }
     updateQualityAvailability();
+}
+
+/**
+ * Show only the output format options that are relevant to the given
+ * file type ('image' or 'pdf') and hide the rest.
+ */
+function filterOutputFormats(fileType) {
+    const options = outputFormat.querySelectorAll('option[data-for]');
+    options.forEach(opt => {
+        if (opt.dataset.for === fileType) {
+            opt.hidden = false;
+            opt.disabled = false;
+        } else {
+            opt.hidden = true;
+            opt.disabled = true;
+        }
+    });
+    // For PDF, auto-select Markdown since it's the only option
+    if (fileType === 'pdf') {
+        outputFormat.value = 'md';
+        convertButtonContainer.classList.remove('hidden');
+        // Hide image-specific options for PDF → Markdown
+        optionsSection.classList.add('hidden');
+    } else {
+        optionsSection.classList.remove('hidden');
+    }
 }
 
 function handleFormatChange() {
@@ -118,6 +162,12 @@ function handleFormatChange() {
         convertButtonContainer.classList.add('hidden');
     }
     updateQualityAvailability();
+    // Hide image-specific options when converting to Markdown
+    if (outputFormat.value === 'md') {
+        optionsSection.classList.add('hidden');
+    } else {
+        optionsSection.classList.remove('hidden');
+    }
 }
 
 function handleQualityChange() {
@@ -143,9 +193,10 @@ async function convertFile() {
         return;
     }
     
-    // Hide convert button and format selection, show progress
+    // Show progress
     convertButtonContainer.classList.add('hidden');
     formatSelection.classList.add('hidden');
+    // Only hide options section if it's visible (not already hidden for PDF)
     optionsSection.classList.add('hidden');
     progressContainer.classList.remove('hidden');
     resultContainer.classList.add('hidden');
@@ -210,6 +261,7 @@ async function convertFile() {
 
 function animateProgress() {
     progressFill.style.width = '0%';
+    const isPdf = selectedFile && isPdfFile(selectedFile);
     progressText.textContent = 'Uploading file...';
     
     let progress = 0;
@@ -221,7 +273,7 @@ function animateProgress() {
             if (progress < 30) {
                 progressText.textContent = 'Uploading file...';
             } else if (progress < 60) {
-                progressText.textContent = 'Converting image...';
+                progressText.textContent = isPdf ? 'Extracting text...' : 'Converting image...';
             } else {
                 progressText.textContent = 'Finalizing...';
             }
@@ -284,8 +336,17 @@ function reset() {
     resizeWidth.value = '';
     resizeHeight.value = '';
     
+    // Restore all format options
+    const options = outputFormat.querySelectorAll('option[data-for]');
+    options.forEach(opt => {
+        opt.hidden = false;
+        opt.disabled = false;
+    });
+
     dropZone.classList.remove('hidden');
     filePreview.classList.add('hidden');
+    previewImage.classList.remove('hidden');
+    previewPdf.classList.add('hidden');
     formatSelection.classList.add('hidden');
     optionsSection.classList.add('hidden');
     convertButtonContainer.classList.add('hidden');

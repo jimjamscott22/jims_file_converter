@@ -20,6 +20,9 @@ pydantic-settings>=2.6.0
 # Image processing (local conversion)
 Pillow>=10.0.0
 
+# PDF processing (PDF to Markdown conversion)
+PyMuPDF>=1.23.0
+
 # Templates
 jinja2==3.1.2
 

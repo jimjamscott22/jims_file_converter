@@ -56,22 +56,22 @@ def validate_file_format(filename: str, file_content: Optional[bytes] = None) ->
     """
     extension = get_file_extension(filename)
     
-    if extension not in settings.supported_formats:
+    if extension not in settings.input_formats:
         raise HTTPException(
             status_code=400,
             detail=f"Unsupported file format: .{extension}. "
-                   f"Supported formats: {', '.join(settings.supported_formats)}"
+                   f"Supported formats: {', '.join(settings.input_formats)}"
         )
     
     # Additional MIME type validation if content is provided
     if file_content:
         try:
             mime = magic.from_buffer(file_content, mime=True)
-            # Check if MIME type matches expected image types
-            if not mime.startswith('image/'):
+            # Allow image types and PDF
+            if not (mime.startswith('image/') or mime == 'application/pdf'):
                 raise HTTPException(
                     status_code=400,
-                    detail=f"File is not a valid image. Detected type: {mime}"
+                    detail=f"File is not a valid image or PDF. Detected type: {mime}"
                 )
         except Exception as e:
             # If magic fails, we'll rely on extension validation
@@ -95,14 +95,41 @@ def validate_output_format(output_format: str) -> str:
     """
     output_format = output_format.lower().strip()
     
-    if output_format not in settings.supported_formats:
+    if output_format not in settings.output_formats:
         raise HTTPException(
             status_code=400,
             detail=f"Unsupported output format: {output_format}. "
-                   f"Supported formats: {', '.join(settings.supported_formats)}"
+                   f"Supported formats: {', '.join(settings.output_formats)}"
         )
     
     return output_format
+
+
+def validate_conversion_pair(input_format: str, output_format: str) -> None:
+    """
+    Validate that the input→output format combination is allowed.
+
+    Rules:
+    - PDF input can only convert to Markdown (md).
+    - Image inputs cannot convert to Markdown.
+
+    Args:
+        input_format: The input file format extension.
+        output_format: The desired output format extension.
+
+    Raises:
+        HTTPException: If the combination is not supported.
+    """
+    if input_format == "pdf" and output_format != "md":
+        raise HTTPException(
+            status_code=400,
+            detail="PDF files can only be converted to Markdown (md)."
+        )
+    if input_format != "pdf" and output_format == "md":
+        raise HTTPException(
+            status_code=400,
+            detail="Markdown output is only supported for PDF input files."
+        )
 
 
 def sanitize_filename(filename: str) -> str:

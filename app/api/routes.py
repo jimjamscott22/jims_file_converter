@@ -13,6 +13,7 @@ from app.utils.validators import (
     validate_file_size,
     validate_file_format,
     validate_output_format,
+    validate_conversion_pair,
     sanitize_filename,
     validate_quality,
     validate_resize_dimensions
@@ -20,6 +21,7 @@ from app.utils.validators import (
 from app.services.file_handler import file_handler
 from app.services.converter import cloudconvert_service, ConversionError
 from app.services.local_converter import local_convert_service
+from app.services.pdf_converter import pdf_convert_service
 
 router = APIRouter()
 
@@ -37,6 +39,8 @@ async def health_check():
         "api_configured": api_configured,
         "local_conversion": True,
         "supported_formats": settings.supported_formats,
+        "input_formats": settings.input_formats,
+        "output_formats": settings.output_formats,
         "max_file_size_mb": settings.max_file_size_mb
     }
 
@@ -45,8 +49,9 @@ async def health_check():
 async def get_supported_formats():
     """Get list of supported file formats."""
     return {
-        "input_formats": settings.supported_formats,
-        "output_formats": settings.supported_formats
+        "input_formats": settings.input_formats,
+        "output_formats": settings.output_formats,
+        "image_formats": settings.supported_formats,
     }
 
 
@@ -83,6 +88,34 @@ async def convert_file(
         
         # Validate output format
         output_format = validate_output_format(output_format)
+
+        # Validate input→output combination
+        validate_conversion_pair(input_format, output_format)
+
+        # PDF → Markdown path (no quality / resize options)
+        if pdf_convert_service.can_convert(input_format, output_format):
+            input_file_path = await file_handler.save_upload(file)
+            output_filename = file_handler.generate_output_filename(
+                sanitize_filename(file.filename),
+                output_format
+            )
+            output_file_path = file_handler.get_temp_path(
+                f"{uuid.uuid4()}_{output_filename}"
+            )
+            await pdf_convert_service.convert_to_markdown(
+                input_file_path, output_file_path
+            )
+            download_url = f"/api/download/{output_file_path.name}"
+            return {
+                "success": True,
+                "message": "Conversion completed successfully",
+                "original_filename": file.filename,
+                "output_filename": output_filename,
+                "download_url": download_url,
+                "input_format": input_format,
+                "output_format": output_format,
+                "conversion_method": "local",
+            }
         
         # Validate optional conversion options
         quality_value = None
