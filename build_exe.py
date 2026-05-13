@@ -3,9 +3,38 @@ Build script for creating Windows executable with PyInstaller.
 Run this script to build the executable: python build_exe.py
 """
 
+import sys
 import PyInstaller.__main__
 import shutil
 from pathlib import Path
+from packaging.version import Version
+
+# Minimum PyInstaller version required per Python minor version.
+# Update this dict when new Python versions are released.
+_PYINSTALLER_MIN: dict[tuple[int, int], str] = {
+    (3, 11): "5.13",
+    (3, 12): "6.3",
+    (3, 13): "6.11",
+    (3, 14): "6.12",
+}
+
+def check_pyinstaller_compatibility() -> None:
+    py = (sys.version_info.major, sys.version_info.minor)
+    min_ver = _PYINSTALLER_MIN.get(py)
+    if min_ver is None:
+        print(f"⚠️  Python {py[0]}.{py[1]} has no known PyInstaller minimum in this script.")
+        print("   Proceeding — but the build may fail if PyInstaller is too old.")
+        return
+    installed = Version(PyInstaller.__version__)
+    required = Version(min_ver)
+    if installed < required:
+        print(f"✗ PyInstaller {installed} is too old for Python {py[0]}.{py[1]}.")
+        print(f"  Minimum required: {required}")
+        print(f"  Fix: pip install --upgrade \"pyinstaller>={required}\"")
+        sys.exit(1)
+    print(f"✓ PyInstaller {installed} is compatible with Python {py[0]}.{py[1]}")
+
+check_pyinstaller_compatibility()
 
 # Clean previous builds
 if Path("build").exists():
