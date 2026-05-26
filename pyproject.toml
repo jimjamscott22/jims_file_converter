@@ -23,7 +23,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pyinstaller==6.3.0",
+    "pyinstaller>=6.12",
 ]
 
 [tool.uv]
