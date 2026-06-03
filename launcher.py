@@ -9,6 +9,7 @@ import webbrowser
 import time
 import threading
 from pathlib import Path
+import ctypes
 # Fix stdin/stdout/stderr for windowed mode (prevents uvicorn logging errors)
 if getattr(sys, 'frozen', False):
     # Running as compiled executable in windowed mode
@@ -47,22 +48,27 @@ def open_browser(url, delay=2):
 def main():
     """Main entry point for the launcher."""
     print("=" * 60)
-    print("🎨 Jim's File Converter")
+    print("Jim's File Converter")
     print("=" * 60)
     
     # Check for .env file
     env_file = ORIGINAL_DIR / ".env"
     if not env_file.exists():
-        print("\n⚠️  WARNING: .env file not found!")
-        print(f"Please create a .env file in: {ORIGINAL_DIR}")
-        print("\nThe .env file should contain:")
-        print("CLOUDCONVERT_API_KEY=your_api_key_here")
-        print("MAX_FILE_SIZE_MB=10")
-        print("HOST=127.0.0.1")
-        print("PORT=8000")
-        print("\nPress Enter to exit...")
-        input()
-        sys.exit(1)
+        warning_message = (
+            "No .env file was found next to the executable.\n\n"
+            f"Create one in:\n{ORIGINAL_DIR}\n\n"
+            "The app will still open, but CloudConvert conversions may not work until you add your API key."
+        )
+        print(f"\nWARNING: {warning_message}")
+        try:
+            ctypes.windll.user32.MessageBoxW(
+                0,
+                warning_message,
+                "Jim's File Converter - Warning",
+                0x30,
+            )
+        except Exception:
+            pass
     
     # Create temp directory in the original location
     temp_dir = ORIGINAL_DIR / "temp"
@@ -73,13 +79,13 @@ def main():
     
     url = f"http://127.0.0.1:{settings.port}"
     
-    print(f"🌐 Starting server at {url}")
-    print(f"📁 Temp directory: {temp_dir}")
-    print(f"📊 Max file size: {settings.max_file_size_mb}MB")
-    print(f"🔧 Supported formats: {', '.join(settings.supported_formats)}")
+    print(f"Starting server at {url}")
+    print(f"Temp directory: {temp_dir}")
+    print(f"Max file size: {settings.max_file_size_mb}MB")
+    print(f"Supported formats: {', '.join(settings.supported_formats)}")
     print("=" * 60)
-    print("\n✨ Browser will open automatically...")
-    print("❌ Close this window to stop the server\n")
+    print("\nBrowser will open automatically...")
+    print("Close this window to stop the server\n")
     
     # Open browser in a separate thread
     browser_thread = threading.Thread(target=open_browser, args=(url,))
@@ -96,9 +102,9 @@ def main():
             access_log=False      # Disable access logs to avoid console issues
         )
     except KeyboardInterrupt:
-        print("\n\n👋 Shutting down...")
+        print("\n\nShutting down...")
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        print(f"\nError: {e}")
         # Try to show error in a message box if possible
         try:
             import ctypes
